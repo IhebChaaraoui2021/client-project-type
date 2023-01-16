@@ -1,0 +1,9 @@
+img{
+    width: 280px;
+    float: left;
+    height: 280px;
+    background-color: white;
+  
+    padding: 3px;
+    border :solid aquamarine 30px;
+  }

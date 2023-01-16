@@ -1,0 +1,62 @@
+<div class="main-content">
+	<div class="header">
+	  <span data-toggle-menu data-toggle-header class="toggle-menu-header"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>
+	  header
+	</div>
+	<div class="wrapper">
+	  <div class="aside" data-aside>
+		<div class="menu">
+		  <div data-menu-tab="menu-settings" class="menu__tab">
+			<div class="menu__header">
+				Settings
+			  <span data-toggle-menu data-toggle-aside class="toggle-menu"><i class="fa fa-arrow-left" aria-hidden="true"></i></span>
+			</div>
+			<div class="menu__scroller">
+			<ul class="menu__list">
+			  <li class="menu__item">profil</li>
+			  <li class="menu__item">produit</li>
+			  <li class="menu__item">item</li>
+			  <li class="menu__item">menu-item-4</li>
+			  <li class="menu__item">menu-item-5</li>
+		
+		  </ul>
+		  </div>
+		  </div>
+		  <div data-menu-tab="menu-dashbord" class="menu__tab   menu__tab--active">
+			<div class="menu__header">
+				Dashbord
+			  <span data-toggle-menu data-toggle-aside class="toggle-menu"><i class="fa fa-arrow-left" aria-hidden="true"></i></span>
+			</div>
+			<div class="menu__scroller">
+			<ul class="menu__list">
+				<li class="menu__item" routerLinkActive="active" routerLink="/dashboard/user">profil</li>
+				<li class="menu__item" routerLinkActive="active" routerLink="/dashboard/products">produit</li>
+			  <li class="menu__item">menu-item-3</li>
+			 
+		  </ul>
+		  </div>
+		  </div>
+		  <div class="menu__footer">
+			<a data-menu-tab-btn="menu-dashbord" class="active"  href="#">D</a>
+			<a data-menu-tab-btn="menu-settings"  href="#">S</a>
+		  </div>    
+		</div>
+	  </div>
+	  <div class="content">
+	  <div class="main">
+		<div class="main__inner">
+		  <div class="scroller">
+			  <div class="scroller__inner">
+				<router-outlet ></router-outlet>
+				<router-outlet name="d"></router-outlet>
+			</div>
+		  </div>
+	   </div>   
+	  </div>
+	  <div class="footer">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt vero, voluptas veritatis ipsum vitae sint deserunt fugit molestias eligendi. Deleniti, consequuntur quisquam odio laborum ipsam magni autem fugiat mollitia fuga eveniet ab doloribus illo unde suscipit quo tempora enim dolorum a earum eius explicabo commodi excepturi sequi, eum? Doloremque, animi.</div>
+	</div>
+  
+  
+  
+	</div>
+  </div>
