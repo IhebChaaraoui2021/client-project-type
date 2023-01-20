@@ -1,6 +1,6 @@
 import { HttpClient, HttpEvent, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { FileUploadService } from 'src/app/services/file-upload.service';
 
 @Component({
@@ -21,7 +21,9 @@ export class ImgProfilComponent implements OnInit {
     constructor(private uploadService: FileUploadService) {}
   
     ngOnInit(): void {
-      this.imageInfos = this.uploadService.getFiles();
+      this.imageInfos =of(this.uploadService.getFiles());
+      this.preview='http://localhost:4000/uploads/'+this.uploadService.getFiles().image
+      console.log(this.preview)
     }
   
     selectFile(event: any): void {
@@ -64,7 +66,8 @@ export class ImgProfilComponent implements OnInit {
                 this.progress = Math.round((100 * event.loaded) / event.total);
               } else if (event instanceof HttpResponse) {
                 this.message = event.body.message;
-                this.imageInfos = this.uploadService.getFiles();
+                this.imageInfos =  event.body.user.image;
+                localStorage.setItem('currentUser', JSON.stringify(event.body.user));
               }
             },
             error: (err: any) => {

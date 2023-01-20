@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { delay, map, tap } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })
@@ -23,11 +23,15 @@ export class AuthenticationService {
     login(email:string, password:string) {
         return this.http.post<any>(`${this.apiUrl}/api/login`, { email, password })
             .pipe(map(user => {
-
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
+                console.log(user)
+                let b=this.getUser(user.token)
+                console.log('fthth', b)
+                       // store user details and jwt token in local storage to keep user logged in between page refreshes
+                       localStorage.setItem('currentUser', JSON.stringify(b));
+                       localStorage.setItem('token', user.token);
+                      
+                       this.currentUserSubject.next(b);
+                       return b;
             }),
             tap(n => {
                 
@@ -39,11 +43,14 @@ export class AuthenticationService {
     reg(email:string,username:string, password:string) {
         return this.http.post<any>(`${this.apiUrl}/api/signup`, { email, password,username })
             .pipe(map(user => {
-
+         console.log(user)
+         let b=this.getUser(user.token)
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
+                localStorage.setItem('currentUser', JSON.stringify(b));
+                localStorage.setItem('token', user.token);
+               
+                this.currentUserSubject.next(b);
+                return b;
             }),
             tap(n => {
                 
@@ -57,4 +64,36 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }
+    isLoggedIn() {
+        return of(true).pipe(delay(500));
+      }
+      hasPermissions() {
+        let g=localStorage.getItem('currentUser') ||''
+       let currentUser= JSON.parse(g).User
+      
+       console.log(currentUser)
+        return currentUser;
+      }
+      getData() {
+        let g=localStorage.getItem('currentUser') ||''
+       let currentUser= JSON.parse(localStorage.getItem('currentUser') ||'')
+       console.log(currentUser,'rtr')
+        return currentUser.User;
+      }
+      /*  isUserLoggedIn(): boolean {
+                return this.isloggedIn;
+            }
+         
+            isAdminUser():boolean {
+                if (this.userName=='Admin') {
+                    return true; 
+                }
+                return false;
+            }*/
+        private getUser(token: string): object | null {
+            if (!token) {
+              return null
+            }
+            return JSON.parse(atob(token.split('.')[1])) as object;
+          }
 }

@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, Route, PreloadingStrategy } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { AuthGuard } from './gard/asynchronous.guard';
+import { HasRoleGuard, PermissionGuard } from './gard/permission.guard';
+
 import { LoginComponent } from './layout/login/login.component';
 import { UserModule } from './modules/user/user.module';
 import {ProductsModule} from './products/products.module';
@@ -15,10 +18,19 @@ const routes: Routes = [
   //{ path: 'products', loadChildren:() => {return ProductsModule;},  canActivate: [AuthGuard],  },
 
    /** Dashboard */
-   { path: 'dashboard', component: DashbordComponent ,  canActivate: [AuthGuard]
-    ,children: [
-    { path: 'products', loadChildren: () =>{return ProductsModule;}},
-    { path: 'user', loadChildren: () =>{return UserModule;}},
+   { path: 'dashboard', component: DashbordComponent ,
+   canActivate: [AuthGuard] , 
+  canActivateChild:[PermissionGuard],
+    
+    children: [
+    { path: 'products', loadChildren: () =>{return ProductsModule;} , 
+    
+     data: {
+       role: ['user','admin'],
+     }},
+    { path: 'user', loadChildren: () =>{return UserModule}, data: {
+      role: ['admin'],
+    }},
    
   ]},
  /** 404 NOT FOUND */
@@ -28,6 +40,12 @@ const routes: Routes = [
 /** canActivate : [RouteGuardService], */
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+ 
 })
 export class AppRoutingModule { }
+export class CustomPreloader implements PreloadingStrategy {
+  preload(route: Route, load: Function): Observable<any> {
+    return route.data && route.data.preload ? load() : of(null);
+  }
+}
